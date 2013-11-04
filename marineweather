@@ -1,0 +1,101 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Untitled Document</title>
+<style type="text/css">
+.brd {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size:12px;
+	padding:5px;
+	background-color:#1E1E1E;
+	color:#CCC;
+}
+.txt {
+font-family: Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	color: #FFF;
+	}
+	
+.txt2 {
+	color:#39F;
+	font-style:normal;
+	font-weight:bold;
+	}
+.txt3 {
+	color:#FFF;
+	font-size:11px;
+	font-style:italic;
+	font-weight:normal;
+	}
+.blah {
+	font-family:"Oswald",san-serif;
+	color: rgb(237, 10, 10);	
+	font-size: 22px;
+	}
+.brd1 {	
+padding-left:28px;
+}
+</style>
+</head>
+
+<body>
+<div style="width:305px; background-color:#1E1E1E;" align="center"><div style='width: 240px; height: 420px; background-image: url( http://vortex.accuweather.com/adcbin/netweather_v2/backgrounds/blue_240x420_bg.jpg ); background-repeat: no-repeat; background-color: #346797;' >
+      <div id='NetweatherContainer' style='height: 405px;' >
+        <script src='http://netweather.accuweather.com/adcbin/netweather_v2/netweatherV2ex.asp?partner=netweather&tStyle=whteYell&logo=1&zipcode=54301&lang=eng&size=12&theme=blue&metric=0&target=_blank'></script>
+      </div>
+      <div style='text-align: center; font-family: arial, helvetica, verdana, sans-serif; font-size: 10px; line-height: 15px; color: #FFFFFF;' ><a style='font-size: 10px; color: #FFFFFF' href='http://www.accuweather.com/en/us/green-bay-wi/54303/weather-forecast/1868' target='_blank' >Green Bay Forecast</a> | <a style='color: #FFFFFF' href='http://www.accuweather.com/en/us/green-bay-wi/weather-radar'  target='_blank'>Doppler Weather Radar</a></div>
+    </div></div>
+<table border="0" cellpadding="5" cellspacing="0" class="brd">
+    <tr>
+      <td width="300"><a href="http://forecast.weather.gov/MapClick.php?lat=44.5497689935907&lon=-87.98126220703125" target="_blank" class="txt"><strong>NOAA Marine Weather</strong></a> - Green Bay, WI<br><span class="txt2">
+      <?php
+
+$doc = new DOMDocument;
+
+// We don't want to bother with white spaces
+$doc->preserveWhiteSpace = true;
+
+$doc->Load('http://forecast.weather.gov/MapClick.php?lat=44.55&lon=-87.98&FcstType=dwml');
+
+$xpath = new DOMXPath($doc);
+
+// We starts from the root element
+$query = "//dwml";
+
+ //start-valid-time@period-name 
+ //wordedForecast/text[1] | 
+ 
+$events = $xpath->query($query);
+
+foreach ($events as $event) {
+
+ //for($i = 0; $i < ($events->length); $i++) {
+ //   $event = $events->item($i);
+    $day1 = $xpath->evaluate("//time-layout[layout-key='k-p12h-n9-1']/start-valid-time[1]/@period-name");
+    $day2 = $xpath->evaluate("//time-layout[layout-key='k-p12h-n9-1']/start-valid-time[2]/@period-name");
+    $day3 = $xpath->evaluate("//time-layout[layout-key='k-p12h-n9-1']/start-valid-time[3]/@period-name");
+    $rep1 = $xpath->evaluate("//wordedForecast/text[1]");
+    $rep2 = $xpath->evaluate("//wordedForecast/text[2]");
+    $rep3 = $xpath->evaluate("//wordedForecast/text[3]");
+
+//parameters/wordedForecast[time-layout='k-p12h-n9-1']/text[1]
+
+  //  $result = '';
+   // if ($url->length > 0) {
+   //     $result .= $url->item(0)->value;
+  //  }
+
+  //  if ($nom->length > 0) {
+  //      $result .= $nom->item(0)->value;
+  //  }
+
+  //  if ($lieu->length > 0) {
+  //      $result .= $lieu->item(0)->value;
+  //  }
+
+    //echo $result . "<br />";
+    echo $day1->item(0)->nodeValue . ': <span class="txt3">' . $rep1->item(0)->nodeValue  . '</span><br/>' . $day2->item(0)->nodeValue . ': <span class="txt3"> ' . $rep2->item(0)->nodeValue . '</span><br/>' . $day3->item(0)->nodeValue . ': <span class="txt3"> ' . $rep3->item(0)->nodeValue;
+}
+?>        </span></td></tr></table>
+</body>
+</html>
